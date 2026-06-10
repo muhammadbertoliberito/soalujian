@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/proses_ai", "destination": "/api/proses_ai.py" },
+    { "source": "/api/webhook", "destination": "/api/webhook.js" },
+    { "source": "/(.*)", "destination": "/public/$1" }
+  ]
+}

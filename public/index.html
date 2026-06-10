@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PERWIRA - Security Monitoring Dashboard</title>
+  <meta name="description" content="Dashboard keamanan terintegrasi dengan verifikasi HMAC webhook, eksekusi AI asinkronus, dan pemantauan metrik dinamis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="stars-bg"></div>
+  <div class="dashboard-container">
+    
+    <!-- HEADER -->
+    <header class="main-header">
+      <div class="logo-area">
+        <div class="logo-shield">🛡️</div>
+        <div>
+          <h1>PERWIRA SECURITY</h1>
+          <p class="subtitle">Sistem Deteksi Ancaman & Integrasi AI Terpadu</p>
+        </div>
+      </div>
+      <div class="status-pill-header">
+        <span class="pulse-indicator"></span>
+        <span id="connection-status">Sistem Online</span>
+      </div>
+    </header>
+
+    <!-- GRID LAYOUT -->
+    <main class="dashboard-grid">
+      
+      <!-- COLUMN 1: METRICS & SYSTEM STATUS -->
+      <section class="grid-col flex-col gap-4">
+        
+        <!-- DYNAMIC METRIC CARD (Langkah 9) -->
+        <div id="metric-card" class="metric-card card-safe">
+          <div class="card-glow"></div>
+          <div class="card-header">
+            <h3>STATUS KEAMANAN SISTEM</h3>
+            <span id="status-badge" class="badge">AMAN</span>
+          </div>
+          <div class="card-body">
+            <div class="metric-value" id="status-text">SYSTEM SECURED</div>
+            <p id="status-desc" class="desc-text">Seluruh gerbang database dan API berjalan normal tanpa gangguan.</p>
+            
+            <div class="sub-metrics">
+              <div class="sub-metric-item">
+                <span class="label">Level Ancaman</span>
+                <span class="value" id="danger-level">0</span>
+              </div>
+              <div class="sub-metric-item">
+                <span class="label">Update Terakhir</span>
+                <span class="value" id="last-update">Baru saja</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TELEGRAM & BOT STATUS CARD -->
+        <div class="glass-card">
+          <h3>Konfigurasi Telegram & Bot</h3>
+          <div class="config-status-list">
+            <div class="config-item">
+              <span class="icon">🤖</span>
+              <div>
+                <div class="config-label">Telegram Bot Status</div>
+                <div class="config-val" id="tg-bot-status">Aktif (Simulasi / API)</div>
+              </div>
+            </div>
+            <div class="config-item">
+              <span class="icon">🔑</span>
+              <div>
+                <div class="config-label">HMAC Security</div>
+                <div class="config-val text-green">AKTIF (SHA-256)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- COLUMN 2: SIMULATOR & CONTROL PANEL -->
+      <section class="grid-col flex-col gap-4">
+        
+        <!-- WEBHOOK SIMULATOR PANEL (Langkah 8) -->
+        <div class="glass-card">
+          <div class="card-title-badge">
+            <h3>Simulator Webhook HMAC Supabase</h3>
+            <span class="tech-badge">Node.js</span>
+          </div>
+          <p class="section-intro">Simulasikan database Supabase mengirim laporan bahaya/aman ke web API Vercel dengan stempel digital HMAC.</p>
+          
+          <form id="webhook-form" class="form-container">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="simulate-status">Pilih Status</label>
+                <select id="simulate-status" class="form-control">
+                  <option value="AMAN" selected>AMAN (Kembalikan ke Normal)</option>
+                  <option value="BAHAYA">BAHAYA (Kirim Peringatan Ancaman)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="threat-level">Level Ancaman</label>
+                <select id="threat-level" class="form-control">
+                  <option value="0">0 (Normal)</option>
+                  <option value="1">1 (Rendah)</option>
+                  <option value="2">2 (Sedang)</option>
+                  <option value="3">3 (Tinggi/Kritis)</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="alert-message">Pesan Laporan Kejadian</label>
+              <input type="text" id="alert-message" class="form-control" value="Sistem mendeteksi aktivitas mencurigakan di port database.">
+            </div>
+
+            <div class="form-group">
+              <label for="hmac-secret-input">Kunci Rahasia HMAC (HMAC_SECRET)</label>
+              <input type="text" id="hmac-secret-input" class="form-control" value="fallback_development_secret_key_12345">
+              <small class="help-text">Gunakan kunci yang sama dengan environment variable untuk kecocokan stempel.</small>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-container">
+                <input type="checkbox" id="tamper-signature">
+                <span class="checkmark"></span>
+                Kirim stempel palsu / rusak (Simulasi Serangan Hacker)
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="btn-send-webhook">Kirim Webhook Terlindungi HMAC</button>
+          </form>
+        </div>
+
+        <!-- NVIDIA NIM ASYNC BENCHMARK (Langkah 7) -->
+        <div class="glass-card">
+          <div class="card-title-badge">
+            <h3>Panggilan 2 AI Asynchronous</h3>
+            <span class="tech-badge">Python / FastAPI</span>
+          </div>
+          <p class="section-intro">Eksekusi model Random Forest (RF) dan Support Vector Machine (SVM) secara paralel menggunakan <code>asyncio</code>.</p>
+          
+          <div class="benchmark-controls">
+            <input type="text" id="ai-input-data" class="form-control" value="Data payload transaksi untuk dievaluasi oleh AI NIM">
+            <button id="btn-run-ai" class="btn btn-secondary">Jalankan Rantai AI (Parallel)</button>
+          </div>
+
+          <div class="benchmark-results" id="ai-results-panel" style="display:none;">
+            <div class="stats-row">
+              <div class="stat-box">
+                <div class="stat-num" id="ai-duration">0.00s</div>
+                <div class="stat-lbl">Waktu Total</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-num text-green">ASYNC</div>
+                <div class="stat-lbl">Metode Eksekusi</div>
+              </div>
+            </div>
+            
+            <div class="results-grid">
+              <div class="result-card">
+                <h4>NVIDIA NIM (RF)</h4>
+                <div class="res-val" id="rf-pred">-</div>
+                <div class="res-conf" id="rf-conf">-</div>
+              </div>
+              <div class="result-card">
+                <h4>NVIDIA NIM (SVM)</h4>
+                <div class="res-val" id="svm-pred">-</div>
+                <div class="res-conf" id="svm-conf">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- COLUMN 3: TERMINAL & OUTPUT LOGS -->
+      <section class="grid-col span-full-desktop">
+        <div class="glass-card console-card">
+          <div class="console-header">
+            <h3>LOG CONSOLE SISTEM & API</h3>
+            <button id="clear-console" class="btn-clear">Clear Logs</button>
+          </div>
+          <div class="console-body" id="console-logs">
+            <div class="log-line system-msg">[SYSTEM] PERWIRA dashboard v1.0 initialized.</div>
+            <div class="log-line system-msg">[SYSTEM] Menunggu event webhook atau pemanggilan AI...</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    
+    <!-- SETTINGS & TECHNICAL INFO -->
+    <footer class="main-footer">
+      <p>© 2026 PERWIRA Integrated Web Security Project | CI/CD GitHub Actions & Vercel</p>
+    </footer>
+  </div>
+</body>
+</html>

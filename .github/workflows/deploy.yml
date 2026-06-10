@@ -1,0 +1,11 @@
+name: Jalur Deploy Otomatis
+on: [push] # Setiap Anda ketik 'git push', kode otomatis terupload ke Vercel
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Vercel
+        run: npm install -g vercel
+      - name: Kirim Ke Vercel beserta Kunci Rahasia
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} -e SUPABASE_URL=${{ secrets.SUPABASE_URL }} -e SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }} --yes

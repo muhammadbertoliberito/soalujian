@@ -1,0 +1,21 @@
+{
+  "name": "perwira-security-dashboard",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Integrated security dashboard with HMAC webhook verification and concurrent AI execution",
+  "main": "api/webhook.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "test": "node scripts/test_flows.js"
+  },
+  "keywords": [
+    "security",
+    "hmac",
+    "vercel",
+    "fastapi",
+    "asyncio"
+  ],
+  "author": "PERWIRA Security",
+  "license": "ISC",
+  "dependencies": {}
+}
