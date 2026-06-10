@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/api/proses_ai", "destination": "/api/proses_ai.py" },
-    { "source": "/api/webhook", "destination": "/api/webhook.js" },
-    { "source": "/(.*)", "destination": "/public/$1" }
+  "builds": [
+    { "src": "api/proses_ai.py", "use": "@vercel/python" },
+    { "src": "api/webhook.js", "use": "@vercel/node" },
+    { "src": "public/**", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/api/proses_ai", "dest": "/api/proses_ai.py" },
+    { "src": "/api/webhook", "dest": "/api/webhook.js" },
+    { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
